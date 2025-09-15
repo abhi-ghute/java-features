@@ -22,6 +22,18 @@ public class streams {
         flatMapToDouble();
         flatMapToLong();
         generateMethod();
+        iterateMethod();
+    }
+
+    private static void iterateMethod() {
+
+        //iterate without predicate
+        List<Integer> list = Stream.iterate(1,n->n+2).limit(10).toList();
+        System.out.println("iterate() without predicate: "+list);
+
+        //iterate with predicate
+        List<Integer> list1 = Stream.iterate(1,n->n<15,n->n+2).limit(10).toList();
+        System.out.println("iterate() with predicate: "+list1);
     }
 
     private static void generateMethod() {
