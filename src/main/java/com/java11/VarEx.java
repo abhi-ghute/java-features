@@ -3,7 +3,6 @@ package com.java11;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class VarEx {
     public static void main(String[] args) {
