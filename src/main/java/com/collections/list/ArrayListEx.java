@@ -47,7 +47,9 @@ public class ArrayListEx {
         list.replaceAll(String::toUpperCase);
         System.out.println(list);
         list.sort(Comparator.naturalOrder());
-        System.out.println(list);
+        System.out.println("Natural sorting order: "+list);
+        list.sort(Comparator.reverseOrder());
+        System.out.println("Reverse Order:"+list);
     }
 
     private static void subListMethod() {

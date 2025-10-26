@@ -14,6 +14,9 @@ public class streams {
         collectMethods();
         concatDemo();
         count();
+        distinctMethod();
+        dropwhileMethod();
+        emptyMethod();
         drop();
         filterMethod();
         findMethods();
@@ -23,6 +26,62 @@ public class streams {
         flatMapToLong();
         generateMethod();
         iterateMethod();
+    }
+
+    private static void emptyMethod() {
+        List<Object> o = null;
+        List<Object> list = o == null ? Stream.empty().toList() : o.stream().toList();
+
+        System.out.println("empty() when object is null: "+list);
+    }
+
+    private static void dropwhileMethod() {
+        List<Integer> list = List.of(1,2,3,4,5,6,1,2);
+
+        List<Integer> result = list.stream().dropWhile(n->n<4).toList();
+        System.out.println("dropwhile n is less than 4: "+result);
+    }
+
+    private static void distinctMethod() {
+        class Person {
+            String name;
+            int age;
+
+            Person(String name, int age) {
+                this.name = name;
+                this.age = age;
+            }
+
+            // Needed for distinct() to work properly
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (!(o instanceof Person)) return false;
+                Person p = (Person) o;
+                return age == p.age && Objects.equals(name, p.name);
+            }
+
+            //also needed to put it in same bucket
+            @Override
+            public int hashCode() {
+                return Objects.hash(name, age);
+            }
+
+            @Override
+            public String toString() {
+                return name + " (" + age + ")";
+            }
+        }
+
+        List<Person> persons = List.of(
+                new Person("abhi",18),
+                new Person("abhi",18),
+                new Person("abhi",17),
+                new Person("ram",27)
+        );
+
+        List<Person> personList = persons.stream().distinct().toList();
+        System.out.println("distinct method on object"+personList);
     }
 
     private static void iterateMethod() {
@@ -169,8 +228,8 @@ public class streams {
     }
 
     private static void concatDemo() {
-        List<Integer> num1 = Stream.of(1, 2, 3, 4, 5).toList();
-        List<Integer> num2 = List.of(6, 7, 8, 9, 10);
+        Set<Integer> num1 = Stream.of(1, 2, 3, 4, 5).collect(Collectors.toSet());
+        List<Integer> num2 = List.of(6, 7, 8, 9, 1);
 
         List<Integer> result = Stream.concat(num1.stream(), num2.stream()).toList();
 
@@ -194,7 +253,13 @@ public class streams {
                 .add("Ajay")
                 .build();
 
+        Stream<List<String>> stream2 = Stream.<List<String>>builder()
+                .add(List.of("abhi", "ram", "om"))
+                .add(List.of("jay","prakash"))
+                .build();
+
         System.out.println("Stream using builder: " + stream.toList());
+        System.out.println("Stream of list using builder: " + stream2.toList());
 
     }
 
