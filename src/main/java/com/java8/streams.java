@@ -17,15 +17,38 @@ public class streams {
         distinctMethod();
         dropwhileMethod();
         emptyMethod();
-        drop();
         filterMethod();
         findMethods();
         flatMap();
         flatMapToInt();
         flatMapToDouble();
         flatMapToLong();
+        forEachMethod();
+        forEachOrderedMethod();
+        gatherMethod(); // added in java 22 preview and 25 as release
         generateMethod();
         iterateMethod();
+    }
+
+    private static void gatherMethod() {
+//        List<List<Integer>> moreWindows =
+//                Stream.of(1,2,3,4,5,6,7,8)
+//                        .gather(Gatherers.windowSliding(3))
+//                        .toList();
+    }
+
+    private static void forEachOrderedMethod() {
+        int[] nums = {1,2,3,4,5};
+        System.out.print("For Each Ordered  Method  with parallel Stream: ");
+        Arrays.stream(nums).parallel().forEachOrdered(n-> System.out.print(n +" "));
+        System.out.println();
+    }
+
+    private static void forEachMethod() {
+        int[] nums = {1,2,3,4,5};
+        System.out.print("For Each Method: ");
+        Arrays.stream(nums).forEach(n-> System.out.print(n +" "));
+        System.out.println();
     }
 
     private static void emptyMethod() {
@@ -87,12 +110,20 @@ public class streams {
     private static void iterateMethod() {
 
         //iterate without predicate
-        List<Integer> list = Stream.iterate(1,n->n+2).limit(10).toList();
+        //seed->starting value
+        List<Integer> list = Stream.iterate(3,n->n+2).limit(10).toList();
         System.out.println("iterate() without predicate: "+list);
 
         //iterate with predicate
         List<Integer> list1 = Stream.iterate(1,n->n<15,n->n+2).limit(10).toList();
         System.out.println("iterate() with predicate: "+list1);
+
+        System.out.print("Fibonacci series using iterate: ");
+        Stream.iterate(new int[]{0, 1}, t -> new int[]{t[1], t[0] + t[1]})
+                .limit(10)
+                .map(t -> t[0])
+                .forEach(n-> System.out.print(n+" "));
+        System.out.println();
     }
 
     private static void generateMethod() {
@@ -164,13 +195,6 @@ public class streams {
 
         System.out.println("Split each word to one list from list of String : "+list1);
 
-        Map<String,String> map = new HashMap<>();
-        map.put("a","Abhi");
-        map.put("b","ball");
-
-        List<String> mapValues = map.values().stream().toList();
-        System.out.println(mapValues);
-
         Map<String, Map<String, Integer>> outerMap = new HashMap<>();
 
         outerMap.put("Fruits", Map.of("Apple", 10, "Banana", 20));
@@ -211,13 +235,6 @@ public class streams {
                 .filter(n -> n % 3 == 0).toList();
 
         System.out.println("filter Method: " + evenDivisibleBy3);
-    }
-
-    private static void drop() {
-        List<Integer> result = Stream.of(1, 2, 4, 5, 6, 7, 8, 1, 2, 3, 4)
-                .dropWhile(n -> n < 4).toList();
-
-        System.out.println("dropWhile(): " + result);
     }
 
     private static void count() {
