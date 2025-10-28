@@ -28,6 +28,83 @@ public class streams {
         gatherMethod(); // added in java 22 preview and 25 as release
         generateMethod();
         iterateMethod();
+        limitMethod();
+        mapMethod();
+        mapMultiMethod();
+        maxMethod();
+        minMethod();
+        ofMethod();
+        ofNullableMethod();
+    }
+
+    private static void ofNullableMethod() {
+        Stream<String> greetings = Stream.of("hello",null,"hi",null,"hey","hola","");
+
+        List<String> cleanGreetings = greetings.flatMap(Stream::ofNullable)
+                        .toList();
+        System.out.println("ofNullable() "+cleanGreetings);
+    }
+
+    private static void ofMethod() {
+        Stream<String> greetings = Stream.of("hello","hi","hey","hola");
+        System.out.println("Stream.of(): "+greetings.toList());
+    }
+
+    private static void maxMethod() {
+        List<Integer> list = List.of(1,2,4,51,0,23,134,123);
+
+        Optional<Integer> max = list.stream()
+                .max(Comparator.naturalOrder());
+        System.out.println("Max : "+max);
+    }
+
+    private static void minMethod() {
+        List<Integer> list = List.of(1,2,4,51,0,23,134,123);
+
+        Optional<Integer> min = list.stream()
+                .min(Comparator.comparingInt(Integer::intValue));
+        System.out.println("Min : "+min);
+    }
+
+    private static void mapMultiMethod() {
+        List<String> sentences = List.of("Java is fun", "Streams are powerful");
+
+        //here we are emitting when condition is true
+        List<String> words = sentences.stream()
+                .<String>mapMulti((sentence,consumer)->{
+                    for (String word : sentence.split(" ")) {
+                        consumer.accept(word);
+                    }
+                })
+                .toList();
+
+        System.out.println("multimap processing with condition: "+words);
+
+        List<List<Integer>> lists = List.of(
+                List.of(1, 2),
+                List.of(3, 4)
+        );
+
+        List<Integer> intList = lists.stream()
+                .<Integer>mapMulti((list, consumer) -> {
+                    list.forEach(consumer); // passing consumer reference
+                }).toList();
+
+        System.out.println("multimap processing without condition: "+intList);
+    }
+
+    private static void mapMethod() {
+        List<String> words = Arrays.asList("Java", "Streams", "map");
+
+        List<Integer> list =words.stream()
+                .map(String::length).toList();
+
+        System.out.println("words length with arraylist using map: "+list);
+    }
+
+    private static void limitMethod() {
+        List<Integer> list = Stream.iterate(3,n->n+2).limit(3).toList();
+        System.out.println("limit(3) : "+list);
     }
 
     private static void gatherMethod() {
